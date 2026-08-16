@@ -1,5 +1,61 @@
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .preloader {
-  height: 100vh;
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
   width: 100vw;
   background: #eeede9;
+  user-select: none;
+  @include flex-center;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  color: #0d0d0d;
+  font-family: inherit;
+}
+
+.imageContainer {
+  position: relative;
+  width: 2.6rem;
+  height: 3.4rem;
+  overflow: hidden;
+  margin: 0 0.15rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  .imageWrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    @include flex-center;
+
+    &:first-child {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    img {
+      object-fit: cover;
+    }
+  }
+}
+
+.counter {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-left: 0.45rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
