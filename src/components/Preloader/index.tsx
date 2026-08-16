@@ -1,97 +1,117 @@
 "use client";
 
-import styles from "./style.module.scss";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import styles from "./style.module.scss";
 
 gsap.registerPlugin(useGSAP);
 
-interface ImageProps {
+interface PreloaderImage {
     src: string;
     alt: string;
 }
 
-const images: ImageProps[] = [
-    {
-        src: "/images/1.jpg",
-        alt: "Portrait"
-    },
-    {
-        src: "/images/2.jpg",
-        alt: "Moon walk me home"
-    },
-    {
-        src: "/images/3.jpg",
-        alt: "Flower"
-    },
-    {
-        src: "/images/4.jpg",
-        alt: "Clouds"
-    },
-    {
-        src: "/images/5.jpg",
-        alt: "Mountain"
-    },
-    {
-        src: "/images/6.jpg",
-        alt: "Book"
-    },
-    {
-        src: "/images/7.jpg",
-        alt: "Flower"
-    },
-    {
-        src: "/images/8.jpg",
-        alt: "Butterfly"
-    },
-    {
-        src: "/images/9.jpg",
-        alt: "Mantis"
-    },
-    {
-        src: "/images/10.jpg",
-        alt: "Happy"
-    }
-]
+const IMAGES: PreloaderImage[] = [
+    { src: "/images/1.jpg", alt: "Frame 1" },
+    { src: "/images/2.jpg", alt: "Frame 2" },
+    { src: "/images/3.jpg", alt: "Frame 3" },
+    { src: "/images/4.jpg", alt: "Frame 4" },
+    { src: "/images/5.jpg", alt: "Frame 5" },
+    { src: "/images/6.jpg", alt: "Frame 6" },
+    { src: "/images/7.jpg", alt: "Frame 7" },
+    { src: "/images/8.jpg", alt: "Frame 8" },
+    { src: "/images/9.jpg", alt: "Frame 9" },
+    { src: "/images/10.jpg", alt: "Frame 10" },
+];
 
 export default function Preloader() {
-    const preloaderRef = useRef<HTMLElement>(null);
-    const imageRef = useRef<(HTMLDivElement | null)[]>([]);
-    const counterRef = useRef<HTMLSpanElement>(null);
+    const containerRef = useRef<HTMLElement>(null);
+    const counterRef = useRef<HTMLDivElement>(null);
+    const slidesRef = useRef<(HTMLDivElement | null)[]>([]);
+
+    useGSAP(
+        () => {
+            const counter = { val: 0 };
+            gsap.to(counter, {
+                val: 100,
+                duration: 2.5,
+                ease: "power2.inOut",
+                onUpdate: () => {
+                    if (counterRef.current) {
+                        counterRef.current.textContent = `${Math.round(counter.val)}%`;
+                    }
+                },
+            });
+
+            const validSlides = slidesRef.current.filter(Boolean) as HTMLDivElement[];
+            if (validSlides.length > 1) {
+                const frameDuration = 0.12;
+                const cycleTl = gsap.timeline({ repeat: -1 });
+
+                validSlides.forEach((slide, idx) => {
+                    const nextSlide = validSlides[(idx + 1) % validSlides.length];
+                    cycleTl
+                        .to({}, { duration: frameDuration })
+                        .set(slide, { autoAlpha: 0 })
+                        .set(nextSlide, { autoAlpha: 1 });
+                });
+            }
+        },
+        { scope: containerRef }
+    );
+
     return (
         <aside
             className={styles.preloader}
-            ref={preloaderRef}
+            ref={containerRef}
             role="status"
             aria-live="polite"
             aria-label="Loading page content"
         >
-            <div className={styles.content}>
-                <span className={styles.glyph} aria-hidden="true">*</span>
-                <span className={styles.bracket} aria-hidden="true">(</span>
-                <div className={styles.imageContainer} aria-hidden="true">
-                    {images.map((img, i) => (
-                        <div
-                            key={i}
-                            ref={(el) => { imageRef.current[i] = el; }}
-                            className={styles.imageWrapper}
-                        >
-                            <Image
-                                src={img.src}
-                                alt={img.alt}
-                                fill
-                                priority={i < 2}
-                            />
+            <div className={styles.body}>
+                <div className={styles.whole}>
+                    <div className={styles.main}>
+                        <div className={styles.symbol} aria-hidden="true">
+                            <svg
+                                viewBox="0 0 53 54"
+                                fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path d="M53 18.8458L31.6544 27.0011L53 35.5176L46.8501 45.8469L29.1215 31.3491L32.5592 54H20.6222L23.8785 31.3491L6.14993 45.8469L0 35.5176L21.527 27.0011L0 18.8458L6.14993 8.15529L23.8785 22.6509L20.6222 0H32.5592L29.1215 22.4692L46.8501 8.15529L53 18.8458Z" />
+                            </svg>
                         </div>
-                    ))}
-                </div>
-                <span className={styles.bracket} aria-hidden="true">)</span>
 
-                <span className={styles.counter} ref={counterRef}>
-                    0%
-                </span>
+                        <div className={styles.content}>
+                            <span className={styles.bracket} aria-hidden="true">(</span>
+                            <div className={styles.imageWrapper} aria-hidden="true">
+                                {IMAGES.map((img, i) => (
+                                    <div
+                                        key={img.src}
+                                        ref={(el) => {
+                                            slidesRef.current[i] = el;
+                                        }}
+                                        className={styles.slide}
+                                    >
+                                        <Image
+                                            src={img.src}
+                                            alt={img.alt}
+                                            fill
+                                            priority={i < 2}
+                                            className={styles.image}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <span className={styles.bracket} aria-hidden="true">)</span>
+                        </div>
+
+                        <div className={styles.counter} ref={counterRef}>
+                            0%
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
     );
