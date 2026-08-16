@@ -28,8 +28,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible;
-  will-change: transform;
+  overflow: hidden;
+  padding: 0 5rem
 }
 
 .main {
@@ -60,7 +60,7 @@
 
 .content {
   position: relative;
-  font-size: clamp(4rem, 7vw, 7rem);
+  font-size: clamp(3.5rem, 6.5vw, 6.5rem);
   font-weight: 700;
   line-height: 1;
   @include flex-center;

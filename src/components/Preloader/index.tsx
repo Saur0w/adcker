@@ -30,26 +30,15 @@ export default function Preloader() {
     const containerRef = useRef<HTMLElement>(null);
     const counterRef = useRef<HTMLDivElement>(null);
     const slidesRef = useRef<(HTMLDivElement | null)[]>([]);
+    const bodyRef = useRef<HTMLDivElement>(null);
 
     useGSAP(
         () => {
-            const counter = { val: 0 };
-            gsap.to(counter, {
-                val: 100,
-                duration: 2.5,
-                ease: "power2.inOut",
-                onUpdate: () => {
-                    if (counterRef.current) {
-                        counterRef.current.textContent = `${Math.round(counter.val)}%`;
-                    }
-                },
-            });
-
+            const cycleTl = gsap.timeline({ repeat: -1 });
             const validSlides = slidesRef.current.filter(Boolean) as HTMLDivElement[];
+
             if (validSlides.length > 1) {
                 const frameDuration = 0.12;
-                const cycleTl = gsap.timeline({ repeat: -1 });
-
                 validSlides.forEach((slide, idx) => {
                     const nextSlide = validSlides[(idx + 1) % validSlides.length];
                     cycleTl
@@ -58,6 +47,54 @@ export default function Preloader() {
                         .set(nextSlide, { autoAlpha: 1 });
                 });
             }
+            const counter = { val: 0 };
+            const masterTl = gsap.timeline();
+
+            masterTl.fromTo(bodyRef.current, {
+                yPercent: 130,
+                opacity: 0,
+            }, {
+                yPercent: 0,
+                opacity: 1,
+                duration: 0.5,
+                ease: "power4.out"
+            });
+
+            masterTl.to(counter, {
+                val: 100,
+                duration: 2.5,
+                ease: "power2.inOut",
+                onUpdate: () => {
+                    if (counterRef.current) {
+                        counterRef.current.textContent = `${Math.round(counter.val)}%`;
+                    }
+                },
+            }, "-=0.6");
+
+            masterTl.call(() => {
+                cycleTl.kill();
+            });
+
+            masterTl.to(bodyRef.current, {
+                opacity: 0,
+                duration: 0.5,
+                delay: 0.2,
+                ease: "power4.out",
+            })
+
+            masterTl.fromTo(containerRef.current, {
+                clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            }, {
+                clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+                duration: 1.1,
+                ease: "power4.inOut",
+                delay: 0.15
+            });
+
+            masterTl.set(containerRef.current, {
+                display: "none",
+            });
+
         },
         { scope: containerRef }
     );
@@ -72,7 +109,7 @@ export default function Preloader() {
         >
             <div className={styles.body}>
                 <div className={styles.whole}>
-                    <div className={styles.main}>
+                    <div className={styles.main} ref={bodyRef}>
                         <div className={styles.symbol} aria-hidden="true">
                             <svg
                                 viewBox="0 0 53 54"
