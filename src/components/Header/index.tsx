@@ -3,6 +3,8 @@
 import styles from "./style.module.scss";
 import Link from "next/link";
 import PerspectiveText from "@/ui/PerspectiveText";
+import Nav from "./nav";
+import { useState } from "react";
 
 const Logo = () => (
     <svg
@@ -40,23 +42,31 @@ const Logo = () => (
 );
 
 export default function Header() {
+    const [isOpen, setIsOpen] = useState(false);
     return (
-        <header className={styles.header}>
-            <div className={styles.body}>
-                <div className={styles.logo}>
-                    <Link href="/">
-                        <PerspectiveText>
-                            <Logo />
-                        </PerspectiveText>
-                    </Link>
-                </div>
+        <>
+            <header className={`${styles.header} ${isOpen ? styles.headerActive : ""}`}>
+                <div className={styles.body}>
+                    <div className={styles.logo}>
+                        <Link href="/">
+                            <PerspectiveText>
+                                <Logo />
+                            </PerspectiveText>
+                        </Link>
+                    </div>
 
-                <div className={styles.menu}>
-                    <button>
-                        <PerspectiveText label="Menu" />
-                    </button>
+                    <div className={styles.menu}>
+                        <button
+                            onClick={() => setIsOpen((prev) => !prev)}
+                        >
+                            <PerspectiveText key={isOpen ? "close" : "menu"}>
+                                {isOpen ? "Close" : "Menu"}
+                            </PerspectiveText>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+            <Nav isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        </>
     );
 }
