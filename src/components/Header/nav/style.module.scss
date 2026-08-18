@@ -8,6 +8,130 @@
   z-index: 40;
   clip-path: inset(0% 0% 100% 0%);
   will-change: clip-path;
+  font-family: var(--font-neue-montreal), sans-serif;
+}
+
+.navWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 80px 40px 32px 40px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.menuList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.menuItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0.82;
+
+  .link {
+    font-size: clamp(48px, 8.5vw, 130px);
+    font-weight: 700;
+    color: #eeede9;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    display: inline-block;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .labelLeft,
+  .labelRight {
+    position: absolute;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: clamp(12px, 1.1vw, 16px);
+    font-weight: 400;
+    color: #eeede9;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .labelLeft {
+    right: calc(100% + 24px);
+  }
+
+  .labelRight {
+    left: calc(100% + 24px);
+  }
+}
+
+.mediaItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  line-height: 1;
+
+  .symbol {
+    font-size: clamp(36px, 6vw, 90px);
+    font-weight: 300;
+    color: #eeede9;
+    user-select: none;
+  }
+
+  .imageBox {
+    width: clamp(54px, 6.2vw, 90px);
+    height: clamp(54px, 6.2vw, 90px);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .socialLink {
+    color: #eeede9;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
 }
