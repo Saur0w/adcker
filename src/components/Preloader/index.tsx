@@ -8,6 +8,10 @@ import styles from "./style.module.scss";
 
 gsap.registerPlugin(useGSAP);
 
+interface PreloaderProps {
+    onComplete?: () => void;
+}
+
 interface PreloaderImage {
     src: string;
     alt: string;
@@ -26,7 +30,7 @@ const IMAGES: PreloaderImage[] = [
     { src: "/images/10.jpg", alt: "Frame 10" },
 ];
 
-export default function Preloader() {
+export default function Preloader({ onComplete }: PreloaderProps) {
     const containerRef = useRef<HTMLElement>(null);
     const counterRef = useRef<HTMLDivElement>(null);
     const slidesRef = useRef<(HTMLDivElement | null)[]>([]);
