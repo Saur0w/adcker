@@ -148,7 +148,6 @@ $ease-hover: cubic-bezier(0.76, 0, 0.24, 1);
   align-items: center;
   justify-content: center;
   gap: clamp(8px, 1.5vw, 16px);
-  margin: 2px 0;
 
   .asterisk {
     position: absolute;
@@ -198,6 +197,13 @@ $ease-hover: cubic-bezier(0.76, 0, 0.24, 1);
       transform: translateY(-50%);
     }
   }
+}
+
+.bracketGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 }
 
 .footer {
