@@ -118,7 +118,7 @@ export default function Nav({ isOpen, onClose }: NavProps) {
                         </div>
                     </div>
 
-                    <div className={`${styles.overflowRow} ${styles.bracketGroup}`}>
+                    <div className={`${styles.overflowRow} ${styles.mediaGroup}`}>
                         <div className={styles.lineWrapper}>
                             <div className={`${styles.itemGroup} ${styles.mediaRow}`}>
                                 <div className={styles.asterisk}>
