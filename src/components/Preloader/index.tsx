@@ -52,7 +52,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                 });
             }
             const counter = { val: 0 };
-            const masterTl = gsap.timeline();
+            const masterTl = gsap.timeline({
+                onComplete: () => {
+                    onComplete?.();
+                }
+            });
 
             masterTl.fromTo(bodyRef.current, {
                 yPercent: 130,

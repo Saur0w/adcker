@@ -4,7 +4,8 @@ import styles from "./style.module.scss";
 import Link from "next/link";
 import PerspectiveText from "@/ui/PerspectiveText";
 import Nav from "./nav";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import {useGSAP} from "@gsap/react";
 
 const Logo = () => (
     <svg
@@ -41,11 +42,29 @@ const Logo = () => (
     </svg>
 );
 
-export default function Header() {
+interface HeaderProps {
+    isReady: boolean;
+}
+
+export default function Header({ isReady }: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const headerRef = useRef<HTMLElement>(null);
+
+    useGSAP(
+        () => {
+            if (!isReady) return;
+
+            gsap.fromTo(
+                headerRef.current,
+                { y: -40, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+            );
+        },
+        { dependencies: [isReady], scope: headerRef }
+    );
     return (
         <>
-            <header className={`${styles.header} ${isOpen ? styles.headerActive : ""}`}>
+            <header ref={headerRef} className={`${styles.header} ${isOpen ? styles.headerActive : ""}`}>
                 <div className={styles.body}>
                     <div className={styles.logo}>
                         <Link href="/">
